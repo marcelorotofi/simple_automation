@@ -1,4 +1,4 @@
-# In the database, there are 3 columns: 'Date of Birth', 'Full Name' and 'City'. We want to create another sheet for each city and to copy every row associated with that city
+# In the "popdata" database, there are 3 columns: 'Date of Birth', 'Full Name' and 'City'. We want to create another sheet for each city and to copy every row associated with that city
 # to the new sheet, keeping the format equal to original. 
 
 # for each row

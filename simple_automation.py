@@ -1,16 +1,17 @@
-# percorrer toda a nossa base de dados
+# In the database, there are 3 columns: 'Date of Birth', 'Full Name' and 'City'. We want to create another sheet for each city and to copy every row associated with that city
+# to the new sheet, keeping the format equal to original. 
 
-# para cada item
-    # ver se city já existe em uma aba. Se não existir, criar aquela aba.
-    # copiar os valores daquela linha e colocar na aba city correspondente
+# for each row
+    # check if city sheet already exists. If not, create sheet.
+    # copy values from that row and paste in corresponding city sheet.
 
 from openpyxl import load_workbook
 from copy import copy
 
-def crate_sheet(city, file_city, header_style):
-    if city not in file_city.sheetnames:
-        file_city.create_sheet(city)
-        new_sheet = file_city[city]
+def crate_sheet(city, workbook_city, header_style):
+    if city not in workbook_city.sheetnames:
+        workbook_city.create_sheet(city)
+        new_sheet = workbook_city[city]
         new_sheet["A1"].value = "Date of Birth"
         new_sheet["B1"].value = "Full Name"
         new_sheet["C1"].value = "City"
@@ -29,8 +30,8 @@ def copy_data(sheet_from, sheet_to, row_from):
         cell_to.value = cell_from.value
         cell_to._style = copy(cell_from._style)
 
-file_city = load_workbook("popdata.xlsx")
-sheet_database = file_city['Sheet1']
+workbook_city = load_workbook("popdata.xlsx")
+sheet_database = workbook_city['Sheet1']
 
 last_line = sheet_database.max_row
 header_style = copy(sheet_database["A1"]._style)
@@ -39,11 +40,11 @@ for i in range(2, last_line+1):
     city = sheet_database.cell(row=i,column=3).value
     if not city:
         break
-    # criar uma aba para city
-    crate_sheet(city, file_city, header_style)
+    # create a sheet for each city
+    crate_sheet(city, workbook_city, header_style)
 
-    # transferir informações para aba
-    sheet_to = file_city[city]
+    # transfer data to sheet
+    sheet_to = workbook_city[city]
     copy_data(sheet_database, sheet_to, i)
 
-file_city.save("popdata2.xlsx")
+workbook_city.save("popdata2.xlsx")
